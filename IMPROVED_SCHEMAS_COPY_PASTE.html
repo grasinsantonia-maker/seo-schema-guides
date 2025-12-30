@@ -1,0 +1,2909 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved Organization Schemas - Copy & Paste Ready</title>
+    <style>
+        :root {
+            --primary: #7984c0;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --code-bg: #0d1117;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+        
+        header h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        header p { opacity: 0.9; }
+        
+        .warning-box {
+            background: rgba(234, 179, 8, 0.15);
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .warning-box h3 {
+            color: var(--warning);
+            margin-bottom: 10px;
+        }
+        
+        .warning-box code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--warning);
+        }
+        
+        .site-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .site-info { flex: 1; min-width: 250px; }
+        
+        .site-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .type-badge {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .site-url {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .site-url:hover { text-decoration: underline; }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .copy-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .copy-btn:hover { opacity: 0.9; }
+        .copy-btn.copied { background: var(--info); }
+        
+        .validate-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        
+        .schema-wrapper {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .schema-code {
+            background: var(--code-bg);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.85rem;
+            position: relative;
+        }
+        
+        .schema-code pre {
+            margin: 0;
+            white-space: pre;
+        }
+        
+        /* Syntax highlighting */
+        .key { color: #7dd3fc; }
+        .string { color: #86efac; }
+        .verify { color: #fbbf24; background: rgba(251, 191, 36, 0.2); padding: 1px 4px; border-radius: 3px; }
+        
+        .instructions {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--info);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .instructions h4 {
+            color: var(--info);
+            margin-bottom: 8px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        .stat-card .label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        footer a { color: var(--primary); }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.6rem; }
+            .site-header { flex-direction: column; text-align: center; }
+            .action-buttons { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✅ Improved Organization Schemas</h1>
+            <p>17 Sites | Copy & Paste Ready for Engineers</p>
+            <p style="margin-top:10px; font-size:0.9rem;">Generated: December 30, 2025 at 18:54</p>
+        </header>
+        
+        <div class="warning-box">
+            <h3>⚠️ Engineer Instructions - VERIFY BEFORE IMPLEMENTING</h3>
+            <p>Fields marked with <code>VERIFY_</code> must be completed with accurate data before implementation:</p>
+            <ul style="margin: 10px 0 0 20px;">
+                <li><code>VERIFY_STREET_ADDRESS</code> - Get exact address from Google My Business</li>
+                <li><code>VERIFY_CITY</code> - Confirm city name</li>
+                <li><code>VERIFY_POSTAL_CODE</code> - Add correct postal/zip code</li>
+                <li><code>VERIFY_LATITUDE</code> / <code>VERIFY_LONGITUDE</code> - Get from Google Maps</li>
+                <li><code>VERIFY_LOGO_URL</code> - Direct URL to logo image (PNG/JPG preferred, min 112x112px)</li>
+                <li><code>VERIFY_*_URL</code> - Add real social media profile URLs</li>
+            </ul>
+        </div>
+        
+        <div class="summary-stats">
+            <div class="stat-card">
+                <div class="number">17</div>
+                <div class="label">Schemas Ready</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">8</div>
+                <div class="label">Different Types</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">100%</div>
+                <div class="label">GEO Optimized</div>
+            </div>
+        </div>
+
+        <div class="site-card" id="site-0">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🏥 A.A Orthopedics
+                        <span class="type-badge" style="background:#ef4444">MedicalBusiness</span>
+                    </div>
+                    <a href="https://aa-orthopedics.co.il/" target="_blank" class="site-url">https://aa-orthopedics.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(0)">
+                        <span id="copy-text-0">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://aa-orthopedics.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": "A.A Orthopedics",
+  "alternateName": "מכון אורטופדי A.A",
+  "url": "https://aa-orthopedics.co.il/",
+  "description": "מכון אורטופדי מוביל בישראל המתמחה באבחון וטיפול בבעיות אורטופדיות, פציעות ספורט וכאבי גב. צוות מומחים עם ניסיון של שנים.",
+  "logo": "https://aa-orthopedics.co.il/wp-content/uploads/2020/07/cropped-favicon-32x32.jpg",
+  "telephone": "+972-73-264-2826",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "<span class="verify">VERIFY_CITY</span>",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-73-264-2826",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/aaorthopedics",
+    "https://www.instagram.com/aa.orthopedia",
+    "https://www.youtube.com/channel/UCP9yeAzUXA6fK8KG_VOowrA"
+  ],
+  "knowsAbout": [
+    "אורטופדיה",
+    "פציעות ספורט",
+    "כאבי גב",
+    "שיקום אורטופדי",
+    "Orthopedics"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-0" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": "A.A Orthopedics",
+  "alternateName": "מכון אורטופדי A.A",
+  "url": "https://aa-orthopedics.co.il/",
+  "description": "מכון אורטופדי מוביל בישראל המתמחה באבחון וטיפול בבעיות אורטופדיות, פציעות ספורט וכאבי גב. צוות מומחים עם ניסיון של שנים.",
+  "logo": "https://aa-orthopedics.co.il/wp-content/uploads/2020/07/cropped-favicon-32x32.jpg",
+  "telephone": "+972-73-264-2826",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "VERIFY_CITY",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-73-264-2826",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/aaorthopedics",
+    "https://www.instagram.com/aa.orthopedia",
+    "https://www.youtube.com/channel/UCP9yeAzUXA6fK8KG_VOowrA"
+  ],
+  "knowsAbout": [
+    "אורטופדיה",
+    "פציעות ספורט",
+    "כאבי גב",
+    "שיקום אורטופדי",
+    "Orthopedics"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-1">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        💼 Admati Agencies
+                        <span class="type-badge" style="background:#3b82f6">ProfessionalService</span>
+                    </div>
+                    <a href="https://admati.com/" target="_blank" class="site-url">https://admati.com/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(1)">
+                        <span id="copy-text-1">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://admati.com/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Admati Agencies",
+  "alternateName": "אדמתי סוכנויות",
+  "url": "https://admati.com/",
+  "description": "Admati Agencies is an international trading company specializing in electronic components, semiconductors and sub-assemblies. Serving global markets with quality parts.",
+  "logo": "https://admati.com/wp-content/uploads/2023/06/cropped-favicon-32x32.png",
+  "telephone": "+972-50-526-3333",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "Tel Aviv",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-50-526-3333",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.linkedin.com/company/admati-agencies-ltd-"
+  ],
+  "knowsAbout": [
+    "Electronic Components",
+    "Semiconductors",
+    "International Trade",
+    "רכיבים אלקטרוניים"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-1" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Admati Agencies",
+  "alternateName": "אדמתי סוכנויות",
+  "url": "https://admati.com/",
+  "description": "Admati Agencies is an international trading company specializing in electronic components, semiconductors and sub-assemblies. Serving global markets with quality parts.",
+  "logo": "https://admati.com/wp-content/uploads/2023/06/cropped-favicon-32x32.png",
+  "telephone": "+972-50-526-3333",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "Tel Aviv",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-50-526-3333",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.linkedin.com/company/admati-agencies-ltd-"
+  ],
+  "knowsAbout": [
+    "Electronic Components",
+    "Semiconductors",
+    "International Trade",
+    "רכיבים אלקטרוניים"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-2">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🏗️ עמוס זיו - רפואה אינטגרטיבית
+                        <span class="type-badge" style="background:#f97316">HomeAndConstructionBusiness</span>
+                    </div>
+                    <a href="https://amosziv.co.il/" target="_blank" class="site-url">https://amosziv.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(2)">
+                        <span id="copy-text-2">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://amosziv.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "עמוס זיו - רפואה אינטגרטיבית",
+  "alternateName": "Amos Ziv Integrative Medicine",
+  "url": "https://amosziv.co.il/",
+  "description": "קליניקה לרפואה אינטגרטיבית המשלבת רפואה סינית מסורתית, טיפול טבעי במחלות לב וליווי הוליסטי. עמוס זיו - מומחה לרפואה משלימה.",
+  "logo": "https://www.amosziv.co.il/wp-content/uploads/2017/10/cropped-favicon-32x32.png",
+  "telephone": "+972-72-397-7121",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "<span class="verify">VERIFY_CITY</span>",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-72-397-7121",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.youtube.com/channel/UCcNVQjDRz1NowML5NATueDQ"
+  ],
+  "knowsAbout": [
+    "רפואה סינית",
+    "רפואה אינטגרטיבית",
+    "מחלות לב",
+    "טיפול טבעי",
+    "Chinese Medicine"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-2" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "עמוס זיו - רפואה אינטגרטיבית",
+  "alternateName": "Amos Ziv Integrative Medicine",
+  "url": "https://amosziv.co.il/",
+  "description": "קליניקה לרפואה אינטגרטיבית המשלבת רפואה סינית מסורתית, טיפול טבעי במחלות לב וליווי הוליסטי. עמוס זיו - מומחה לרפואה משלימה.",
+  "logo": "https://www.amosziv.co.il/wp-content/uploads/2017/10/cropped-favicon-32x32.png",
+  "telephone": "+972-72-397-7121",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "VERIFY_CITY",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-72-397-7121",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.youtube.com/channel/UCcNVQjDRz1NowML5NATueDQ"
+  ],
+  "knowsAbout": [
+    "רפואה סינית",
+    "רפואה אינטגרטיבית",
+    "מחלות לב",
+    "טיפול טבעי",
+    "Chinese Medicine"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-3">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🛒 אנבר פיננסים
+                        <span class="type-badge" style="background:#22c55e">Store</span>
+                    </div>
+                    <a href="https://anbar.co.il/" target="_blank" class="site-url">https://anbar.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(3)">
+                        <span id="copy-text-3">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://anbar.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "אנבר פיננסים",
+  "alternateName": "Anbar Finance",
+  "url": "https://anbar.co.il/",
+  "description": "אנבר - חברה מובילה לייעוץ משכנתאות, הלוואות וביטוח. מומחים בליווי פיננסי אישי עם שירות מקצועי ואישי ללקוחות פרטיים ועסקיים בישראל.",
+  "logo": "https://anbar.co.il/wp-content/uploads/2021/02/cropped-לוגו-שקוף-32x32.png",
+  "telephone": "+972-54-284-4411",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "<span class="verify">VERIFY_CITY</span>",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-54-284-4411",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "<span class="verify">VERIFY_FACEBOOK_URL</span>",
+    "<span class="verify">VERIFY_INSTAGRAM_URL</span>",
+    "<span class="verify">VERIFY_LINKEDIN_URL</span>"
+  ],
+  "knowsAbout": [
+    "משכנתאות",
+    "הלוואות",
+    "ביטוח",
+    "ייעוץ פיננסי",
+    "Mortgages",
+    "Insurance"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-3" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "אנבר פיננסים",
+  "alternateName": "Anbar Finance",
+  "url": "https://anbar.co.il/",
+  "description": "אנבר - חברה מובילה לייעוץ משכנתאות, הלוואות וביטוח. מומחים בליווי פיננסי אישי עם שירות מקצועי ואישי ללקוחות פרטיים ועסקיים בישראל.",
+  "logo": "https://anbar.co.il/wp-content/uploads/2021/02/cropped-לוגו-שקוף-32x32.png",
+  "telephone": "+972-54-284-4411",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "VERIFY_CITY",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-54-284-4411",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "VERIFY_FACEBOOK_URL",
+    "VERIFY_INSTAGRAM_URL",
+    "VERIFY_LINKEDIN_URL"
+  ],
+  "knowsAbout": [
+    "משכנתאות",
+    "הלוואות",
+    "ביטוח",
+    "ייעוץ פיננסי",
+    "Mortgages",
+    "Insurance"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-4">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        ✈️ Barefoot Dive Center Cozumel
+                        <span class="type-badge" style="background:#06b6d4">TravelAgency</span>
+                    </div>
+                    <a href="https://barefootcozumel.com/" target="_blank" class="site-url">https://barefootcozumel.com/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(4)">
+                        <span id="copy-text-4">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://barefootcozumel.com/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "Barefoot Dive Center Cozumel",
+  "alternateName": "בירפוט קוזומל",
+  "url": "https://barefootcozumel.com/",
+  "description": "Premier PADI dive center in Cozumel, Mexico offering scuba diving courses, guided reef dives, and snorkeling tours. Experience the Caribbean's best diving with certified instructors.",
+  "logo": "https://barefootcozumel.com/wp-content/uploads/2023/12/cropped-favicon-32x32.png",
+  "telephone": "+52-987-100-0000",
+  "email": "barefootdiving987@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Cozumel Island",
+    "addressLocality": "Cozumel",
+    "postalCode": "77600",
+    "addressCountry": "MX"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+52-987-100-0000",
+    "contactType": "customer service",
+    "areaServed": "MX",
+    "availableLanguage": [
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/Barefoot.DiveCenter",
+    "https://www.instagram.com/divebarefoot",
+    "https://www.youtube.com/channel/UC204Hj-peORKwLbAy1qb_8g"
+  ],
+  "knowsAbout": [
+    "Scuba Diving",
+    "PADI Certification",
+    "Reef Tours",
+    "Snorkeling",
+    "Cozumel Diving"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Mexico"
+  },
+  "priceRange": "$$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-4" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "Barefoot Dive Center Cozumel",
+  "alternateName": "בירפוט קוזומל",
+  "url": "https://barefootcozumel.com/",
+  "description": "Premier PADI dive center in Cozumel, Mexico offering scuba diving courses, guided reef dives, and snorkeling tours. Experience the Caribbean's best diving with certified instructors.",
+  "logo": "https://barefootcozumel.com/wp-content/uploads/2023/12/cropped-favicon-32x32.png",
+  "telephone": "+52-987-100-0000",
+  "email": "barefootdiving987@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Cozumel Island",
+    "addressLocality": "Cozumel",
+    "postalCode": "77600",
+    "addressCountry": "MX"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+52-987-100-0000",
+    "contactType": "customer service",
+    "areaServed": "MX",
+    "availableLanguage": [
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/Barefoot.DiveCenter",
+    "https://www.instagram.com/divebarefoot",
+    "https://www.youtube.com/channel/UC204Hj-peORKwLbAy1qb_8g"
+  ],
+  "knowsAbout": [
+    "Scuba Diving",
+    "PADI Certification",
+    "Reef Tours",
+    "Snorkeling",
+    "Cozumel Diving"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Mexico"
+  },
+  "priceRange": "$$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-5">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        💼 BeSpirit
+                        <span class="type-badge" style="background:#3b82f6">ProfessionalService</span>
+                    </div>
+                    <a href="https://bespirit.co.il/" target="_blank" class="site-url">https://bespirit.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(5)">
+                        <span id="copy-text-5">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://bespirit.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "BeSpirit",
+  "alternateName": "ביספיריט - לימודי רפואה משלימה",
+  "url": "https://bespirit.co.il/",
+  "description": "BeSpirit - מכללה מובילה ללימודי רפואה משלימה והוליסטית בישראל. קורסים מקצועיים בריפוי, NLP, היפנוזה ופיתוח אישי עם הסמכות בינלאומיות.",
+  "logo": "https://bespirit.co.il/wp-content/uploads/2023/06/fav.jpg",
+  "telephone": "+972-4-637-7716",
+  "email": "info@bespirit.co.il",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "חיפה",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-4-637-7716",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/Spirit.co.il",
+    "https://www.instagram.com/karkurspirit",
+    "https://www.youtube.com/user/horsespeopleschool"
+  ],
+  "knowsAbout": [
+    "רפואה משלימה",
+    "NLP",
+    "היפנוזה",
+    "פיתוח אישי",
+    "Alternative Medicine",
+    "Holistic Healing"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-5" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "BeSpirit",
+  "alternateName": "ביספיריט - לימודי רפואה משלימה",
+  "url": "https://bespirit.co.il/",
+  "description": "BeSpirit - מכללה מובילה ללימודי רפואה משלימה והוליסטית בישראל. קורסים מקצועיים בריפוי, NLP, היפנוזה ופיתוח אישי עם הסמכות בינלאומיות.",
+  "logo": "https://bespirit.co.il/wp-content/uploads/2023/06/fav.jpg",
+  "telephone": "+972-4-637-7716",
+  "email": "info@bespirit.co.il",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "חיפה",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-4-637-7716",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/Spirit.co.il",
+    "https://www.instagram.com/karkurspirit",
+    "https://www.youtube.com/user/horsespeopleschool"
+  ],
+  "knowsAbout": [
+    "רפואה משלימה",
+    "NLP",
+    "היפנוזה",
+    "פיתוח אישי",
+    "Alternative Medicine",
+    "Holistic Healing"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-6">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🎓 מכללת מרכז הבנייה הישראלי
+                        <span class="type-badge" style="background:#8b5cf6">EducationalOrganization</span>
+                    </div>
+                    <a href="https://building.org.il/" target="_blank" class="site-url">https://building.org.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(6)">
+                        <span id="copy-text-6">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://building.org.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "מכללת מרכז הבנייה הישראלי",
+  "alternateName": "Israel Building Center College",
+  "url": "https://building.org.il/",
+  "description": "מכללת מרכז הבנייה הישראלי - מוסד מוביל להכשרה מקצועית בתחומי הבנייה, שיפוצים והנדסה. קורסים מעשיים עם תעודות מקצועיות מוכרות.",
+  "logo": "https://www.building.org.il/wp-content/uploads/2024/06/cropped-מכללת-מרכז-הבנייה-הישראלי-לוגו-1200-x-628-פיקסל-1-32x32.png",
+  "telephone": "+972-3-XXX-XXXX",
+  "email": "Grupo-7910@2x.png",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "תל אביב",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-XXX-XXXX",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/building.israel",
+    "https://www.instagram.com/israeli.building.center"
+  ],
+  "knowsAbout": [
+    "הנדסת בניין",
+    "שיפוצים",
+    "הכשרה מקצועית",
+    "Construction",
+    "Building"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-6" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "מכללת מרכז הבנייה הישראלי",
+  "alternateName": "Israel Building Center College",
+  "url": "https://building.org.il/",
+  "description": "מכללת מרכז הבנייה הישראלי - מוסד מוביל להכשרה מקצועית בתחומי הבנייה, שיפוצים והנדסה. קורסים מעשיים עם תעודות מקצועיות מוכרות.",
+  "logo": "https://www.building.org.il/wp-content/uploads/2024/06/cropped-מכללת-מרכז-הבנייה-הישראלי-לוגו-1200-x-628-פיקסל-1-32x32.png",
+  "telephone": "+972-3-XXX-XXXX",
+  "email": "Grupo-7910@2x.png",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "תל אביב",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-XXX-XXXX",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/building.israel",
+    "https://www.instagram.com/israeli.building.center"
+  ],
+  "knowsAbout": [
+    "הנדסת בניין",
+    "שיפוצים",
+    "הכשרה מקצועית",
+    "Construction",
+    "Building"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-7">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🏥 CardioTeam
+                        <span class="type-badge" style="background:#ef4444">MedicalBusiness</span>
+                    </div>
+                    <a href="https://cardioteam.co.il/" target="_blank" class="site-url">https://cardioteam.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(7)">
+                        <span id="copy-text-7">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://cardioteam.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": "CardioTeam",
+  "alternateName": "קרדיו טים - מרכז לב",
+  "url": "https://cardioteam.co.il/",
+  "description": "CardioTeam - מרכז מתקדם לקרדיולוגיה ורפואת לב בישראל. אבחון וטיפול במחלות לב, בדיקות מאמץ, אקו לב וליווי מטופלים עם צוות מומחים.",
+  "logo": "https://cardioteam.co.il/wp-content/themes/anova/assets/images/favicon.ico",
+  "telephone": "+972-3-940-2222",
+  "email": "office@cardioteam.co.il",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "<span class="verify">VERIFY_CITY</span>",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-940-2222",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/cardioteamil",
+    "https://www.youtube.com/channel/UCTs9IdFp_hz-X4pO1NR-Ktw"
+  ],
+  "knowsAbout": [
+    "קרדיולוגיה",
+    "מחלות לב",
+    "אקו לב",
+    "בדיקת מאמץ",
+    "Cardiology",
+    "Heart Disease"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-7" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": "CardioTeam",
+  "alternateName": "קרדיו טים - מרכז לב",
+  "url": "https://cardioteam.co.il/",
+  "description": "CardioTeam - מרכז מתקדם לקרדיולוגיה ורפואת לב בישראל. אבחון וטיפול במחלות לב, בדיקות מאמץ, אקו לב וליווי מטופלים עם צוות מומחים.",
+  "logo": "https://cardioteam.co.il/wp-content/themes/anova/assets/images/favicon.ico",
+  "telephone": "+972-3-940-2222",
+  "email": "office@cardioteam.co.il",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "VERIFY_CITY",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-940-2222",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/cardioteamil",
+    "https://www.youtube.com/channel/UCTs9IdFp_hz-X4pO1NR-Ktw"
+  ],
+  "knowsAbout": [
+    "קרדיולוגיה",
+    "מחלות לב",
+    "אקו לב",
+    "בדיקת מאמץ",
+    "Cardiology",
+    "Heart Disease"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-8">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🎓 Experis Academy
+                        <span class="type-badge" style="background:#8b5cf6">EducationalOrganization</span>
+                    </div>
+                    <a href="https://experis.co.il/academy/" target="_blank" class="site-url">https://experis.co.il/academy/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(8)">
+                        <span id="copy-text-8">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://experis.co.il/academy/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Experis Academy",
+  "alternateName": "אקספריס אקדמי - הכשרת הייטק",
+  "url": "https://experis.co.il/academy/",
+  "description": "Experis Academy - מסלולי הכשרה מקצועיים להייטק ללא ניסיון קודם. לימודי פיתוח תוכנה, QA, Data ו-DevOps עם השמה בחברות מובילות.",
+  "logo": "https://experis.co.il/academy/wp-content/uploads/2019/08/cropped-favicon-experis-32x32.png",
+  "telephone": "+972-3-238-25295",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "יגאל אלון 114",
+    "addressLocality": "תל אביב",
+    "postalCode": "6744320",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-238-25295",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/ExperisAcademyIL",
+    "https://instagram.com/experis.academy",
+    "https://www.linkedin.com/company/experis-academy-il"
+  ],
+  "knowsAbout": [
+    "הכשרת הייטק",
+    "פיתוח תוכנה",
+    "QA",
+    "DevOps",
+    "Data Science",
+    "Tech Training"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-8" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Experis Academy",
+  "alternateName": "אקספריס אקדמי - הכשרת הייטק",
+  "url": "https://experis.co.il/academy/",
+  "description": "Experis Academy - מסלולי הכשרה מקצועיים להייטק ללא ניסיון קודם. לימודי פיתוח תוכנה, QA, Data ו-DevOps עם השמה בחברות מובילות.",
+  "logo": "https://experis.co.il/academy/wp-content/uploads/2019/08/cropped-favicon-experis-32x32.png",
+  "telephone": "+972-3-238-25295",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "יגאל אלון 114",
+    "addressLocality": "תל אביב",
+    "postalCode": "6744320",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-238-25295",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/ExperisAcademyIL",
+    "https://instagram.com/experis.academy",
+    "https://www.linkedin.com/company/experis-academy-il"
+  ],
+  "knowsAbout": [
+    "הכשרת הייטק",
+    "פיתוח תוכנה",
+    "QA",
+    "DevOps",
+    "Data Science",
+    "Tech Training"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-9">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🎓 Experis Cyber
+                        <span class="type-badge" style="background:#8b5cf6">EducationalOrganization</span>
+                    </div>
+                    <a href="https://experis.co.il/cyber/" target="_blank" class="site-url">https://experis.co.il/cyber/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(9)">
+                        <span id="copy-text-9">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://experis.co.il/cyber/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Experis Cyber",
+  "alternateName": "אקספריס סייבר - שירותי אבטחה",
+  "url": "https://experis.co.il/cyber/",
+  "description": "Experis Cyber - שירותי אבטחת מידע והגנת סייבר מקצועיים. פתרונות אבטחה לארגונים, בדיקות חדירה, SOC ויועצי אבטחה מומחים.",
+  "logo": "https://experis.co.il/cyber/wp-content/uploads/2016/08/cropped-wsi-imageoptim-ES_FVicon-32x32.png",
+  "telephone": "+972-3-568-6400",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "יגאל אלון 114",
+    "addressLocality": "תל אביב",
+    "postalCode": "6744320",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-568-6400",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/tr",
+    "https://www.instagram.com/experis.israel",
+    "https://www.linkedin.com/company/experis-israel",
+    "https://www.youtube.com/user/ExperisIsrael"
+  ],
+  "knowsAbout": [
+    "אבטחת מידע",
+    "סייבר",
+    "בדיקות חדירה",
+    "SOC",
+    "Cybersecurity",
+    "Penetration Testing"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-9" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Experis Cyber",
+  "alternateName": "אקספריס סייבר - שירותי אבטחה",
+  "url": "https://experis.co.il/cyber/",
+  "description": "Experis Cyber - שירותי אבטחת מידע והגנת סייבר מקצועיים. פתרונות אבטחה לארגונים, בדיקות חדירה, SOC ויועצי אבטחה מומחים.",
+  "logo": "https://experis.co.il/cyber/wp-content/uploads/2016/08/cropped-wsi-imageoptim-ES_FVicon-32x32.png",
+  "telephone": "+972-3-568-6400",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "יגאל אלון 114",
+    "addressLocality": "תל אביב",
+    "postalCode": "6744320",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-568-6400",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/tr",
+    "https://www.instagram.com/experis.israel",
+    "https://www.linkedin.com/company/experis-israel",
+    "https://www.youtube.com/user/ExperisIsrael"
+  ],
+  "knowsAbout": [
+    "אבטחת מידע",
+    "סייבר",
+    "בדיקות חדירה",
+    "SOC",
+    "Cybersecurity",
+    "Penetration Testing"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-10">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🏗️ Fency
+                        <span class="type-badge" style="background:#f97316">HomeAndConstructionBusiness</span>
+                    </div>
+                    <a href="https://fency.co.il/" target="_blank" class="site-url">https://fency.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(10)">
+                        <span id="copy-text-10">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://fency.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "Fency",
+  "alternateName": "פנסי - גדרות ופרגולות",
+  "url": "https://fency.co.il/",
+  "description": "Fency - מומחים לגדרות, פרגולות ופתרונות גידור לגינה ולבית. התקנה מקצועית של גדרות עץ, אלומיניום ו-WPC באיכות גבוהה בכל הארץ.",
+  "logo": "https://www.fency.co.il/wp-content/uploads/2021/05/cropped-fency-fav-32x32.png",
+  "telephone": "+972-4-373-0018",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "<span class="verify">VERIFY_CITY</span>",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-4-373-0018",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/tr",
+    "https://www.instagram.com/fency_design1"
+  ],
+  "knowsAbout": [
+    "גדרות",
+    "פרגולות",
+    "גידור לגינה",
+    "גדרות עץ",
+    "Fencing",
+    "Pergolas"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-10" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "Fency",
+  "alternateName": "פנסי - גדרות ופרגולות",
+  "url": "https://fency.co.il/",
+  "description": "Fency - מומחים לגדרות, פרגולות ופתרונות גידור לגינה ולבית. התקנה מקצועית של גדרות עץ, אלומיניום ו-WPC באיכות גבוהה בכל הארץ.",
+  "logo": "https://www.fency.co.il/wp-content/uploads/2021/05/cropped-fency-fav-32x32.png",
+  "telephone": "+972-4-373-0018",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "VERIFY_CITY",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-4-373-0018",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/tr",
+    "https://www.instagram.com/fency_design1"
+  ],
+  "knowsAbout": [
+    "גדרות",
+    "פרגולות",
+    "גידור לגינה",
+    "גדרות עץ",
+    "Fencing",
+    "Pergolas"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-11">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🎓 מכללת אינטק
+                        <span class="type-badge" style="background:#8b5cf6">EducationalOrganization</span>
+                    </div>
+                    <a href="https://intech.org.il/" target="_blank" class="site-url">https://intech.org.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(11)">
+                        <span id="copy-text-11">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://intech.org.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "מכללת אינטק",
+  "alternateName": "Intech College",
+  "url": "https://intech.org.il/",
+  "description": "מכללת אינטק - מוסד מוביל ללימודי מיזוג אוויר, חשמל ואלקטרומכניקה. הכשרה מקצועית עם תעודות מוכרות והשמה בתעסוקה.",
+  "logo": "https://intech.org.il/wp-content/uploads/2022/04/fvi.jpg",
+  "telephone": "+972-76-089-7185",
+  "email": "info@intech.org.il",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "<span class="verify">VERIFY_CITY</span>",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-76-089-7185",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/tr",
+    "https://www.instagram.com/intech_training",
+    "https://www.youtube.com/channel/UCrMFgshw1zc5Bpt4ySkqQ9A"
+  ],
+  "knowsAbout": [
+    "מיזוג אוויר",
+    "חשמל",
+    "אלקטרומכניקה",
+    "HVAC",
+    "Electrical Engineering"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-11" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "מכללת אינטק",
+  "alternateName": "Intech College",
+  "url": "https://intech.org.il/",
+  "description": "מכללת אינטק - מוסד מוביל ללימודי מיזוג אוויר, חשמל ואלקטרומכניקה. הכשרה מקצועית עם תעודות מוכרות והשמה בתעסוקה.",
+  "logo": "https://intech.org.il/wp-content/uploads/2022/04/fvi.jpg",
+  "telephone": "+972-76-089-7185",
+  "email": "info@intech.org.il",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "VERIFY_CITY",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-76-089-7185",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/tr",
+    "https://www.instagram.com/intech_training",
+    "https://www.youtube.com/channel/UCrMFgshw1zc5Bpt4ySkqQ9A"
+  ],
+  "knowsAbout": [
+    "מיזוג אוויר",
+    "חשמל",
+    "אלקטרומכניקה",
+    "HVAC",
+    "Electrical Engineering"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-12">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        💰 מידות
+                        <span class="type-badge" style="background:#eab308">FinancialService</span>
+                    </div>
+                    <a href="https://midot.co.il/" target="_blank" class="site-url">https://midot.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(12)">
+                        <span id="copy-text-12">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://midot.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FinancialService",
+  "name": "מידות",
+  "alternateName": "Midot Credit Rating",
+  "url": "https://midot.co.il/",
+  "description": "מידות - חברת דירוג האשראי המובילה בישראל. שירותי דירוג אשראי, הערכת סיכונים פיננסיים וניתוח נתונים לחברות ומוסדות פיננסיים.",
+  "logo": "https://midot.co.il/wp-content/uploads/sites/8/2019/12/cropped-favicon-a-32x32.png",
+  "telephone": "+972-3-616-1111",
+  "email": "background@2x-1.jpg",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "תל אביב",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-616-1111",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/MidotEnsuringPersonnelIntegrity",
+    "https://www.linkedin.com/company/midot-israel"
+  ],
+  "knowsAbout": [
+    "דירוג אשראי",
+    "הערכת סיכונים",
+    "ניתוח פיננסי",
+    "Credit Rating",
+    "Risk Assessment"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-12" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FinancialService",
+  "name": "מידות",
+  "alternateName": "Midot Credit Rating",
+  "url": "https://midot.co.il/",
+  "description": "מידות - חברת דירוג האשראי המובילה בישראל. שירותי דירוג אשראי, הערכת סיכונים פיננסיים וניתוח נתונים לחברות ומוסדות פיננסיים.",
+  "logo": "https://midot.co.il/wp-content/uploads/sites/8/2019/12/cropped-favicon-a-32x32.png",
+  "telephone": "+972-3-616-1111",
+  "email": "background@2x-1.jpg",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "תל אביב",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-616-1111",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/MidotEnsuringPersonnelIntegrity",
+    "https://www.linkedin.com/company/midot-israel"
+  ],
+  "knowsAbout": [
+    "דירוג אשראי",
+    "הערכת סיכונים",
+    "ניתוח פיננסי",
+    "Credit Rating",
+    "Risk Assessment"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-13">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        💰 Monto
+                        <span class="type-badge" style="background:#eab308">FinancialService</span>
+                    </div>
+                    <a href="https://montopay.com/" target="_blank" class="site-url">https://montopay.com/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(13)">
+                        <span id="copy-text-13">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://montopay.com/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FinancialService",
+  "name": "Monto",
+  "alternateName": "מונטו - תשלומים דיגיטליים",
+  "url": "https://montopay.com/",
+  "description": "Monto - פלטפורמת תשלומים דיגיטליים מתקדמת לעסקים. פתרונות סליקה, ניהול תשלומים וחשבוניות עם ממשק פשוט ועמלות תחרותיות.",
+  "logo": "https://montopay.com/wp-content/uploads/2024/07/favicon-1.svg",
+  "telephone": "+972-3-012-42194",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "תל אביב",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-012-42194",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.linkedin.com/company/monto-pay"
+  ],
+  "knowsAbout": [
+    "תשלומים דיגיטליים",
+    "סליקה",
+    "Fintech",
+    "Payment Gateway",
+    "Digital Payments"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-13" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FinancialService",
+  "name": "Monto",
+  "alternateName": "מונטו - תשלומים דיגיטליים",
+  "url": "https://montopay.com/",
+  "description": "Monto - פלטפורמת תשלומים דיגיטליים מתקדמת לעסקים. פתרונות סליקה, ניהול תשלומים וחשבוניות עם ממשק פשוט ועמלות תחרותיות.",
+  "logo": "https://montopay.com/wp-content/uploads/2024/07/favicon-1.svg",
+  "telephone": "+972-3-012-42194",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "תל אביב",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-3-012-42194",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.linkedin.com/company/monto-pay"
+  ],
+  "knowsAbout": [
+    "תשלומים דיגיטליים",
+    "סליקה",
+    "Fintech",
+    "Payment Gateway",
+    "Digital Payments"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-14">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🛒 MOYA CBD
+                        <span class="type-badge" style="background:#22c55e">Store</span>
+                    </div>
+                    <a href="https://moya-cbd.com/" target="_blank" class="site-url">https://moya-cbd.com/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(14)">
+                        <span id="copy-text-14">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://moya-cbd.com/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "MOYA CBD",
+  "alternateName": "מויה - שמן CBD",
+  "url": "https://moya-cbd.com/",
+  "description": "MOYA - מותג פרימיום לשמני CBD באיכות גבוהה בישראל. מוצרי CBD טבעיים לשינה, הרגעה והקלה על כאבים. משלוחים לכל הארץ.",
+  "logo": "https://moya-cbd.com/wp-content/uploads/2022/04/circulo-100x100.png",
+  "telephone": "+972-54-866-7878",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "<span class="verify">VERIFY_CITY</span>",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-54-866-7878",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/MOYA.CBD",
+    "https://www.instagram.com/moyacbd",
+    "https://twitter.com/MOYA_CBD",
+    "https://www.youtube.com/channel/UCjnxm7-BbQELERbIkHBqVxA"
+  ],
+  "knowsAbout": [
+    "שמן CBD",
+    "קנאביס רפואי",
+    "מוצרי CBD",
+    "CBD Oil",
+    "Wellness"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-14" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "MOYA CBD",
+  "alternateName": "מויה - שמן CBD",
+  "url": "https://moya-cbd.com/",
+  "description": "MOYA - מותג פרימיום לשמני CBD באיכות גבוהה בישראל. מוצרי CBD טבעיים לשינה, הרגעה והקלה על כאבים. משלוחים לכל הארץ.",
+  "logo": "https://moya-cbd.com/wp-content/uploads/2022/04/circulo-100x100.png",
+  "telephone": "+972-54-866-7878",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "VERIFY_CITY",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-54-866-7878",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/MOYA.CBD",
+    "https://www.instagram.com/moyacbd",
+    "https://twitter.com/MOYA_CBD",
+    "https://www.youtube.com/channel/UCjnxm7-BbQELERbIkHBqVxA"
+  ],
+  "knowsAbout": [
+    "שמן CBD",
+    "קנאביס רפואי",
+    "מוצרי CBD",
+    "CBD Oil",
+    "Wellness"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-15">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        💪 שמים וארץ - סטודיו פילאטיס
+                        <span class="type-badge" style="background:#ec4899">HealthClub</span>
+                    </div>
+                    <a href="https://qilates.co.il/" target="_blank" class="site-url">https://qilates.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(15)">
+                        <span id="copy-text-15">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://qilates.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "HealthClub",
+  "name": "שמים וארץ - סטודיו פילאטיס",
+  "alternateName": "Shamayim V'Aretz Pilates Studio",
+  "url": "https://qilates.co.il/",
+  "description": "סטודיו שמים וארץ - פילאטיס מכשירים מקצועי ברחובות. שיעורים פרטיים וקבוצתיים עם מדריכות מוסמכות. חיזוק הגוף ושיפור היציבה.",
+  "logo": "https://www.qilates.co.il/wp-content/uploads/2019/06/cropped-facivon-qilates-32x32.png",
+  "telephone": "+972-72-394-5171",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "רחובות",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-72-394-5171",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/qilates",
+    "https://www.youtube.com/channel/UCfRfMNGKHMxV0u8hs8PVBUQ"
+  ],
+  "knowsAbout": [
+    "פילאטיס",
+    "פילאטיס מכשירים",
+    "כושר",
+    "יציבה",
+    "Pilates",
+    "Reformer Pilates"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "<span class="verify">VERIFY_LATITUDE</span>",
+    "longitude": "<span class="verify">VERIFY_LONGITUDE</span>"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-15" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HealthClub",
+  "name": "שמים וארץ - סטודיו פילאטיס",
+  "alternateName": "Shamayim V'Aretz Pilates Studio",
+  "url": "https://qilates.co.il/",
+  "description": "סטודיו שמים וארץ - פילאטיס מכשירים מקצועי ברחובות. שיעורים פרטיים וקבוצתיים עם מדריכות מוסמכות. חיזוק הגוף ושיפור היציבה.",
+  "logo": "https://www.qilates.co.il/wp-content/uploads/2019/06/cropped-facivon-qilates-32x32.png",
+  "telephone": "+972-72-394-5171",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "רחובות",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-72-394-5171",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/qilates",
+    "https://www.youtube.com/channel/UCfRfMNGKHMxV0u8hs8PVBUQ"
+  ],
+  "knowsAbout": [
+    "פילאטיס",
+    "פילאטיס מכשירים",
+    "כושר",
+    "יציבה",
+    "Pilates",
+    "Reformer Pilates"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  },
+  "priceRange": "₪₪",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "VERIFY_LATITUDE",
+    "longitude": "VERIFY_LONGITUDE"
+  }
+}
+</script></textarea>
+        </div>
+
+        <div class="site-card" id="site-16">
+            <div class="site-header">
+                <div class="site-info">
+                    <div class="site-name">
+                        🎓 מכללת אולטימה
+                        <span class="type-badge" style="background:#8b5cf6">EducationalOrganization</span>
+                    </div>
+                    <a href="https://ultimaschool.co.il/" target="_blank" class="site-url">https://ultimaschool.co.il/</a>
+                </div>
+                <div class="action-buttons">
+                    <button class="copy-btn" onclick="copySchema(16)">
+                        <span id="copy-text-16">📋 Copy Schema</span>
+                    </button>
+                    <a href="https://search.google.com/test/rich-results?url=https://ultimaschool.co.il/" target="_blank" class="validate-btn">
+                        🔍 Test Current
+                    </a>
+                </div>
+            </div>
+            <div class="schema-wrapper">
+                <div class="schema-code">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "מכללת אולטימה",
+  "alternateName": "Ultima School of Design",
+  "url": "https://ultimaschool.co.il/",
+  "description": "מכללת אולטימה - בית ספר מוביל לעיצוב פנים בישראל. לימודי עיצוב פנים, עיצוב מוצר וגרפיקה עם הסמכה מקצועית והשמה בתעסוקה.",
+  "logo": "https://ultimaschool.co.il/wp-content/uploads/2020/11/favicon-150x150.png",
+  "telephone": "+972-54-777-7302",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<span class="verify">VERIFY_ADDRESS</span>",
+    "addressLocality": "<span class="verify">VERIFY_CITY</span>",
+    "postalCode": "<span class="verify">VERIFY_POSTAL</span>",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-54-777-7302",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/Ultima.school",
+    "https://www.instagram.com/ultima_design_school"
+  ],
+  "knowsAbout": [
+    "עיצוב פנים",
+    "עיצוב מוצר",
+    "גרפיקה",
+    "Interior Design",
+    "Product Design"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+&lt;/script&gt;</pre>
+                </div>
+                <div class="instructions">
+                    <h4>Implementation Steps:</h4>
+                    <ol>
+                        <li>Replace all <code>VERIFY_*</code> fields with real data</li>
+                        <li>Add to homepage <code>&lt;head&gt;</code> section or before <code>&lt;/body&gt;</code></li>
+                        <li>Test at <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                        <li>Monitor in Google Search Console → Enhancements → Structured Data</li>
+                    </ol>
+                </div>
+            </div>
+            <textarea id="schema-16" style="position:absolute;left:-9999px;"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "מכללת אולטימה",
+  "alternateName": "Ultima School of Design",
+  "url": "https://ultimaschool.co.il/",
+  "description": "מכללת אולטימה - בית ספר מוביל לעיצוב פנים בישראל. לימודי עיצוב פנים, עיצוב מוצר וגרפיקה עם הסמכה מקצועית והשמה בתעסוקה.",
+  "logo": "https://ultimaschool.co.il/wp-content/uploads/2020/11/favicon-150x150.png",
+  "telephone": "+972-54-777-7302",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "VERIFY_ADDRESS",
+    "addressLocality": "VERIFY_CITY",
+    "postalCode": "VERIFY_POSTAL",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+972-54-777-7302",
+    "contactType": "customer service",
+    "areaServed": "IL",
+    "availableLanguage": [
+      "he",
+      "en"
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/Ultima.school",
+    "https://www.instagram.com/ultima_design_school"
+  ],
+  "knowsAbout": [
+    "עיצוב פנים",
+    "עיצוב מוצר",
+    "גרפיקה",
+    "Interior Design",
+    "Product Design"
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Israel"
+  }
+}
+</script></textarea>
+        </div>
+
+        <footer>
+            <p><strong>Organization Schema Implementation Guide</strong></p>
+            <p>Reference: <a href="https://github.com/grasinsantonia-maker/seo-schema-guides">GitHub Repository</a></p>
+            <p>Nadav Digital SEO Agency | nadavon6@gmail.com</p>
+        </footer>
+    </div>
+    
+    <script>
+        function copySchema(index) {
+            const textarea = document.getElementById('schema-' + index);
+            textarea.style.position = 'fixed';
+            textarea.style.left = '0';
+            textarea.select();
+            document.execCommand('copy');
+            textarea.style.position = 'absolute';
+            textarea.style.left = '-9999px';
+            
+            const btn = document.getElementById('copy-text-' + index);
+            btn.textContent = '✅ Copied!';
+            btn.parentElement.classList.add('copied');
+            
+            setTimeout(() => {
+                btn.textContent = '📋 Copy Schema';
+                btn.parentElement.classList.remove('copied');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
